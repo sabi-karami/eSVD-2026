@@ -1,5 +1,7 @@
 # Contributing to eSVD-2026
 
+**[نسخه فارسی](CONTRIBUTING.fa.md)**
+
 Thanks for your interest in improving eSVD-2026! Contributions of all kinds are
 welcome: bug reports, documentation improvements, new tests, and proposals for
 methodological refinement.

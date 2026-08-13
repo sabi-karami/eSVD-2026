@@ -1,5 +1,7 @@
 # eSVD-2026 — methodology notes
 
+**[نسخه فارسی](methodology.fa.md)**
+
 This document expands on the rationale and precise operational definitions used
 in the eSVD-2026 score. See the main [README](../README.md) for a quick summary
 and usage examples.

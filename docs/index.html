@@ -4,7 +4,9 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>eSVD-2026 Calculator — Extended Total Cerebral Small Vessel Disease Score</title>
-<meta name="description" content="An updated, evidence-based extension of the Total SVD Score (Staals 2014) with cortical superficial siderosis and cortical atrophy markers." />
+<meta name="description" content="An updated, evidence-based extension of the Total SVD Score (Staals 2014) with cortical superficial siderosis and cortical atrophy markers. / نسخه به‌روزشده امتیاز کلی بیماری عروق کوچک مغزی" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #0b1220;
@@ -26,6 +28,41 @@
     background: radial-gradient(1200px 800px at 80% -10%, #16243f 0%, var(--bg) 55%);
     color: var(--text);
     min-height: 100vh;
+    transition: font-family 0.1s;
+  }
+  body.rtl {
+    font-family: "Vazirmatn", Tahoma, -apple-system, sans-serif;
+  }
+  body.rtl .wrap { direction: rtl; }
+  body.rtl label { flex-direction: row-reverse; }
+  body.rtl .components li { flex-direction: row-reverse; }
+  body.rtl .dot { margin-right: 0; margin-left: 8px; }
+  body.rtl .lang-switch { left: 20px; right: auto; }
+  .lang-switch {
+    position: fixed;
+    top: 16px;
+    right: 20px;
+    z-index: 10;
+    display: flex;
+    gap: 6px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 4px;
+  }
+  .lang-switch button {
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    padding: 6px 14px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 0.8rem;
+  }
+  .lang-switch button.active {
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    color: #06101f;
   }
   header {
     padding: 40px 24px 16px;
@@ -43,7 +80,7 @@
     color: var(--muted);
     max-width: 720px;
     margin: 0 auto;
-    line-height: 1.5;
+    line-height: 1.6;
   }
   .wrap {
     max-width: 920px;
@@ -55,6 +92,7 @@
   }
   @media (max-width: 760px) {
     .wrap { grid-template-columns: 1fr; }
+    .lang-switch { position: static; margin: 12px auto 0; width: fit-content; }
   }
   .card {
     background: var(--panel);
@@ -84,6 +122,7 @@
     text-transform: uppercase;
     letter-spacing: 0.04em;
   }
+  body.rtl legend { text-transform: none; }
   label {
     display: flex;
     align-items: center;
@@ -102,11 +141,13 @@
     border-radius: 8px;
     padding: 6px 10px;
     min-width: 150px;
+    font-family: inherit;
   }
   input[type="checkbox"] {
     width: 20px;
     height: 20px;
     cursor: pointer;
+    flex-shrink: 0;
   }
   .hint {
     color: var(--muted);
@@ -158,6 +199,7 @@
     height: 10px;
     border-radius: 50%;
     margin-right: 8px;
+    flex-shrink: 0;
   }
   .dot.on { background: var(--accent-2); }
   .dot.off { background: var(--border); }
@@ -176,6 +218,7 @@
     cursor: pointer;
     font-weight: 600;
     font-size: 0.85rem;
+    font-family: inherit;
   }
   .toggle-mode button.active {
     background: linear-gradient(90deg, var(--accent), var(--accent-2));
@@ -191,6 +234,7 @@
     padding: 1px 6px;
     border-radius: 6px;
     margin-left: 8px;
+    margin-right: 8px;
     vertical-align: middle;
   }
   footer {
@@ -209,112 +253,223 @@
     background: rgba(255,107,107,0.06);
     color: var(--muted);
     font-size: 0.8rem;
-    line-height: 1.5;
+    line-height: 1.6;
   }
 </style>
 </head>
 <body>
 
+<div class="lang-switch">
+  <button id="lang-en" class="active" onclick="setLang('en')">English</button>
+  <button id="lang-fa" onclick="setLang('fa')">فارسی</button>
+</div>
+
 <header>
-  <h1>eSVD-2026</h1>
-  <p>An updated, evidence-based extension of the classic Total Cerebral Small Vessel Disease (SVD) Score
+  <h1 data-i18n="title">eSVD-2026</h1>
+  <p data-i18n="subtitle">An updated, evidence-based extension of the classic Total Cerebral Small Vessel Disease (SVD) Score
   (Staals et&nbsp;al., 2014), adding cortical superficial siderosis and cortical atrophy for a fuller
   0&ndash;6 picture of small vessel disease burden on MRI.</p>
 </header>
 
 <div class="disclaimer">
-  ⚠️ <strong>Research &amp; educational use only.</strong> This calculator is not a certified medical device
+  ⚠️ <strong data-i18n="disclaimer-strong">Research &amp; educational use only.</strong>
+  <span data-i18n="disclaimer-text">This calculator is not a certified medical device
   and must not replace the judgement of a qualified neuroradiologist or neurologist. Always correlate with the
-  full clinical and imaging context.
+  full clinical and imaging context.</span>
 </div>
 
 <div class="wrap">
   <div class="card">
-    <h2>MRI Findings</h2>
+    <h2 data-i18n="findings-heading">MRI Findings</h2>
 
     <div class="toggle-mode">
-      <button id="mode-classic" onclick="setMode('classic')">Classic Total SVD (0–4)</button>
-      <button id="mode-extended" class="active" onclick="setMode('extended')">eSVD-2026 (0–6)</button>
+      <button id="mode-classic" onclick="setMode('classic')" data-i18n="mode-classic">Classic Total SVD (0–4)</button>
+      <button id="mode-extended" class="active" onclick="setMode('extended')" data-i18n="mode-extended">eSVD-2026 (0–6)</button>
     </div>
 
     <fieldset>
-      <legend>Vascular markers</legend>
-      <label><span>Lacune(s) of presumed vascular origin (≥1)</span>
+      <legend data-i18n="legend-vascular">Vascular markers</legend>
+      <label><span data-i18n="label-lacunes">Lacune(s) of presumed vascular origin (≥1)</span>
         <input type="checkbox" id="lacunes" onchange="calculate()"></label>
-      <label><span>Cerebral microbleed(s) (≥1, any location)</span>
+      <label><span data-i18n="label-microbleeds">Cerebral microbleed(s) (≥1, any location)</span>
         <input type="checkbox" id="microbleeds" onchange="calculate()"></label>
     </fieldset>
 
     <fieldset>
-      <legend>White matter hyperintensities (Fazekas)</legend>
-      <label><span>Periventricular WMH grade</span>
+      <legend data-i18n="legend-wmh">White matter hyperintensities (Fazekas)</legend>
+      <label><span data-i18n="label-pv-fazekas">Periventricular WMH grade</span>
         <select id="pvFazekas" onchange="calculate()">
-          <option value="0">0 — none</option>
-          <option value="1">1 — caps/lining</option>
-          <option value="2">2 — smooth halo</option>
-          <option value="3">3 — irregular, extends to deep WM</option>
+          <option value="0" data-i18n="opt-pv-0">0 — none</option>
+          <option value="1" data-i18n="opt-pv-1">1 — caps/lining</option>
+          <option value="2" data-i18n="opt-pv-2">2 — smooth halo</option>
+          <option value="3" data-i18n="opt-pv-3">3 — irregular, extends to deep WM</option>
         </select>
       </label>
-      <label><span>Deep white matter WMH grade</span>
+      <label><span data-i18n="label-deep-fazekas">Deep white matter WMH grade</span>
         <select id="deepFazekas" onchange="calculate()">
-          <option value="0">0 — none</option>
-          <option value="1">1 — punctate foci</option>
-          <option value="2">2 — beginning confluence</option>
-          <option value="3">3 — large confluent areas</option>
+          <option value="0" data-i18n="opt-deep-0">0 — none</option>
+          <option value="1" data-i18n="opt-deep-1">1 — punctate foci</option>
+          <option value="2" data-i18n="opt-deep-2">2 — beginning confluence</option>
+          <option value="3" data-i18n="opt-deep-3">3 — large confluent areas</option>
         </select>
       </label>
-      <p class="hint">A point is scored if periventricular grade = 3 <em>or</em> deep grade ≥ 2 (Staals 2014 definition).</p>
+      <p class="hint" data-i18n="hint-wmh">A point is scored if periventricular grade = 3 <em>or</em> deep grade ≥ 2 (Staals 2014 definition).</p>
     </fieldset>
 
     <fieldset>
-      <legend>Enlarged perivascular spaces (EPVS)</legend>
-      <label><span>Basal ganglia EPVS grade</span>
+      <legend data-i18n="legend-epvs">Enlarged perivascular spaces (EPVS)</legend>
+      <label><span data-i18n="label-epvs">Basal ganglia EPVS grade</span>
         <select id="evpsGrade" onchange="calculate()">
-          <option value="0">0 — none</option>
-          <option value="1">1 — 1–10</option>
-          <option value="2">2 — 11–20</option>
-          <option value="3">3 — 21–40</option>
-          <option value="4">4 — &gt;40</option>
+          <option value="0" data-i18n="opt-epvs-0">0 — none</option>
+          <option value="1" data-i18n="opt-epvs-1">1 — 1–10</option>
+          <option value="2" data-i18n="opt-epvs-2">2 — 11–20</option>
+          <option value="3" data-i18n="opt-epvs-3">3 — 21–40</option>
+          <option value="4" data-i18n="opt-epvs-4">4 — &gt;40</option>
         </select>
       </label>
-      <p class="hint">A point is scored at grade ≥ 2 (≥ 11 EPVS in the basal ganglia).</p>
+      <p class="hint" data-i18n="hint-epvs">A point is scored at grade ≥ 2 (≥ 11 EPVS in the basal ganglia).</p>
     </fieldset>
 
     <fieldset id="extension-fields">
-      <legend>eSVD-2026 extension markers <span class="new-badge">NEW</span></legend>
-      <label><span>Cortical superficial siderosis (any extent, SWI/T2*)</span>
+      <legend><span data-i18n="legend-extension">eSVD-2026 extension markers</span> <span class="new-badge" data-i18n="badge-new">NEW</span></legend>
+      <label><span data-i18n="label-css">Cortical superficial siderosis (any extent, SWI/T2*)</span>
         <input type="checkbox" id="css" onchange="calculate()"></label>
-      <label><span>Global Cortical Atrophy (GCA) grade</span>
+      <label><span data-i18n="label-gca">Global Cortical Atrophy (GCA) grade</span>
         <select id="gcaGrade" onchange="calculate()">
-          <option value="0">0 — no atrophy</option>
-          <option value="1">1 — mild</option>
-          <option value="2">2 — moderate</option>
-          <option value="3">3 — severe</option>
+          <option value="0" data-i18n="opt-gca-0">0 — no atrophy</option>
+          <option value="1" data-i18n="opt-gca-1">1 — mild</option>
+          <option value="2" data-i18n="opt-gca-2">2 — moderate</option>
+          <option value="3" data-i18n="opt-gca-3">3 — severe</option>
         </select>
       </label>
-      <p class="hint">A point is scored at GCA ≥ 2 (moderate–severe cortical atrophy).</p>
+      <p class="hint" data-i18n="hint-gca">A point is scored at GCA ≥ 2 (moderate–severe cortical atrophy).</p>
     </fieldset>
   </div>
 
   <div class="card">
-    <h2>Result</h2>
+    <h2 data-i18n="result-heading">Result</h2>
     <div class="score-display">
       <span class="score-number" id="scoreNumber">0</span>
       <span class="score-max" id="scoreMax">/ 6</span>
-      <div><span class="band none" id="bandLabel">No detectable SVD burden</span></div>
+      <div><span class="band none" id="bandLabel" data-i18n="band-none">No detectable SVD burden</span></div>
     </div>
     <ul class="components" id="componentsList"></ul>
   </div>
 </div>
 
 <footer>
-  eSVD-2026 · open-source research tool ·
-  <a href="https://github.com/sabi-karami/eSVD-2026" target="_blank" rel="noopener">source code &amp; documentation on GitHub</a>
+  <span data-i18n="footer-text">eSVD-2026 · open-source research tool</span> ·
+  <a href="https://github.com/sabi-karami/eSVD-2026" target="_blank" rel="noopener" data-i18n="footer-link">source code &amp; documentation on GitHub</a>
   · MIT License
 </footer>
 
 <script>
 let mode = 'extended';
+let lang = 'en';
+
+const I18N = {
+  en: {
+    title: 'eSVD-2026',
+    subtitle: 'An updated, evidence-based extension of the classic Total Cerebral Small Vessel Disease (SVD) Score (Staals et al., 2014), adding cortical superficial siderosis and cortical atrophy for a fuller 0–6 picture of small vessel disease burden on MRI.',
+    'disclaimer-strong': 'Research & educational use only.',
+    'disclaimer-text': 'This calculator is not a certified medical device and must not replace the judgement of a qualified neuroradiologist or neurologist. Always correlate with the full clinical and imaging context.',
+    'findings-heading': 'MRI Findings',
+    'mode-classic': 'Classic Total SVD (0–4)',
+    'mode-extended': 'eSVD-2026 (0–6)',
+    'legend-vascular': 'Vascular markers',
+    'label-lacunes': 'Lacune(s) of presumed vascular origin (≥1)',
+    'label-microbleeds': 'Cerebral microbleed(s) (≥1, any location)',
+    'legend-wmh': 'White matter hyperintensities (Fazekas)',
+    'label-pv-fazekas': 'Periventricular WMH grade',
+    'opt-pv-0': '0 — none', 'opt-pv-1': '1 — caps/lining', 'opt-pv-2': '2 — smooth halo', 'opt-pv-3': '3 — irregular, extends to deep WM',
+    'label-deep-fazekas': 'Deep white matter WMH grade',
+    'opt-deep-0': '0 — none', 'opt-deep-1': '1 — punctate foci', 'opt-deep-2': '2 — beginning confluence', 'opt-deep-3': '3 — large confluent areas',
+    'hint-wmh': 'A point is scored if periventricular grade = 3 or deep grade ≥ 2 (Staals 2014 definition).',
+    'legend-epvs': 'Enlarged perivascular spaces (EPVS)',
+    'label-epvs': 'Basal ganglia EPVS grade',
+    'opt-epvs-0': '0 — none', 'opt-epvs-1': '1 — 1–10', 'opt-epvs-2': '2 — 11–20', 'opt-epvs-3': '3 — 21–40', 'opt-epvs-4': '4 — >40',
+    'hint-epvs': 'A point is scored at grade ≥ 2 (≥ 11 EPVS in the basal ganglia).',
+    'legend-extension': 'eSVD-2026 extension markers',
+    'badge-new': 'NEW',
+    'label-css': 'Cortical superficial siderosis (any extent, SWI/T2*)',
+    'label-gca': 'Global Cortical Atrophy (GCA) grade',
+    'opt-gca-0': '0 — no atrophy', 'opt-gca-1': '1 — mild', 'opt-gca-2': '2 — moderate', 'opt-gca-3': '3 — severe',
+    'hint-gca': 'A point is scored at GCA ≥ 2 (moderate–severe cortical atrophy).',
+    'result-heading': 'Result',
+    'band-none': 'No detectable SVD burden',
+    'band-mild': 'Mild SVD burden',
+    'band-moderate': 'Moderate SVD burden',
+    'band-severe': 'Severe SVD burden',
+    'footer-text': 'eSVD-2026 · open-source research tool',
+    'footer-link': 'source code & documentation on GitHub',
+    components: {
+      lacunes: 'Lacunes',
+      wmh: 'White matter hyperintensities',
+      microbleeds: 'Microbleeds',
+      evps: 'Enlarged perivascular spaces',
+      css: 'Cortical superficial siderosis',
+      atrophy: 'Cortical atrophy',
+    },
+  },
+  fa: {
+    title: 'eSVD-2026',
+    subtitle: 'نسخه‌ی به‌روزشده و مبتنی بر شواهد از امتیاز کلاسیک بیماری عروق کوچک مغزی (Total SVD Score، Staals و همکاران ۲۰۱۴)، با افزودن سیدروزیس سطحی قشری و آتروفی قشری برای تصویری کامل‌تر (۰ تا ۶) از بار بیماری عروق کوچک در MRI.',
+    'disclaimer-strong': 'صرفاً برای استفاده پژوهشی و آموزشی.',
+    'disclaimer-text': 'این ابزار یک تجهیز پزشکی تأییدشده نیست و نباید جایگزین نظر نورورادیولوژیست یا نورولوژیست متخصص شود. همیشه نتیجه را در کنار کل زمینه‌ی بالینی و تصویربرداری در نظر بگیرید.',
+    'findings-heading': 'یافته‌های MRI',
+    'mode-classic': 'امتیاز کلاسیک SVD (۰ تا ۴)',
+    'mode-extended': 'eSVD-2026 (۰ تا ۶)',
+    'legend-vascular': 'نشانگرهای عروقی',
+    'label-lacunes': 'وجود لاکون(های) با منشأ عروقی محتمل (حداقل ۱ مورد)',
+    'label-microbleeds': 'میکروبلید(های) مغزی (حداقل ۱ مورد، هر محلی)',
+    'legend-wmh': 'ضایعات پرنور ماده سفید (Fazekas)',
+    'label-pv-fazekas': 'درجه‌ی WMH پیرامون‌بطنی',
+    'opt-pv-0': '۰ — بدون ضایعه', 'opt-pv-1': '۱ — کلاهک/حاشیه‌ای', 'opt-pv-2': '۲ — هاله‌ی صاف', 'opt-pv-3': '۳ — نامنظم، گسترش به ماده سفید عمقی',
+    'label-deep-fazekas': 'درجه‌ی WMH ماده سفید عمقی',
+    'opt-deep-0': '۰ — بدون ضایعه', 'opt-deep-1': '۱ — کانون‌های نقطه‌ای', 'opt-deep-2': '۲ — شروع به هم‌پیوستگی', 'opt-deep-3': '۳ — نواحی وسیع به‌هم‌پیوسته',
+    'hint-wmh': 'در صورتی که درجه‌ی پیرامون‌بطنی = ۳ یا درجه‌ی عمقی ≥ ۲ باشد، یک امتیاز ثبت می‌شود (تعریف Staals 2014).',
+    'legend-epvs': 'فضاهای اطراف عروقی بزرگ‌شده (EPVS)',
+    'label-epvs': 'درجه‌ی EPVS در گانگلیون‌های قاعده‌ای',
+    'opt-epvs-0': '۰ — هیچ', 'opt-epvs-1': '۱ — ۱ تا ۱۰', 'opt-epvs-2': '۲ — ۱۱ تا ۲۰', 'opt-epvs-3': '۳ — ۲۱ تا ۴۰', 'opt-epvs-4': '۴ — بیش از ۴۰',
+    'hint-epvs': 'در درجه‌ی ≥ ۲ (بیش از ۱۱ عدد EPVS در گانگلیون‌های قاعده‌ای) یک امتیاز ثبت می‌شود.',
+    'legend-extension': 'نشانگرهای الحاقی eSVD-2026',
+    'badge-new': 'جدید',
+    'label-css': 'سیدروزیس سطحی قشری (هر میزان، در تصاویر SWI/T2*)',
+    'label-gca': 'درجه‌ی آتروفی کلی قشری (GCA)',
+    'opt-gca-0': '۰ — بدون آتروفی', 'opt-gca-1': '۱ — خفیف', 'opt-gca-2': '۲ — متوسط', 'opt-gca-3': '۳ — شدید',
+    'hint-gca': 'در درجه‌ی GCA ≥ ۲ (آتروفی متوسط تا شدید) یک امتیاز ثبت می‌شود.',
+    'result-heading': 'نتیجه',
+    'band-none': 'بدون بار قابل‌تشخیص بیماری عروق کوچک',
+    'band-mild': 'بار خفیف بیماری عروق کوچک',
+    'band-moderate': 'بار متوسط بیماری عروق کوچک',
+    'band-severe': 'بار شدید بیماری عروق کوچک',
+    'footer-text': 'eSVD-2026 · ابزار پژوهشی متن‌باز',
+    'footer-link': 'کد منبع و مستندات در گیت‌هاب',
+    components: {
+      lacunes: 'لاکون‌ها',
+      wmh: 'ضایعات پرنور ماده سفید',
+      microbleeds: 'میکروبلیدها',
+      evps: 'فضاهای اطراف عروقی بزرگ‌شده',
+      css: 'سیدروزیس سطحی قشری',
+      atrophy: 'آتروفی قشری',
+    },
+  },
+};
+
+function setLang(l) {
+  lang = l;
+  document.getElementById('lang-en').classList.toggle('active', l === 'en');
+  document.getElementById('lang-fa').classList.toggle('active', l === 'fa');
+  document.body.classList.toggle('rtl', l === 'fa');
+  document.documentElement.lang = l;
+  document.documentElement.dir = (l === 'fa') ? 'rtl' : 'ltr';
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (I18N[l][key] !== undefined) el.innerHTML = I18N[l][key];
+  });
+  try { localStorage.setItem('esvd-lang', l); } catch (e) {}
+  calculate();
+}
 
 function setMode(m) {
   mode = m;
@@ -327,10 +482,10 @@ function setMode(m) {
 
 function bandFor(total, max) {
   const ratio = max === 0 ? 0 : total / max;
-  if (ratio === 0) return { text: 'No detectable SVD burden', cls: 'none' };
-  if (ratio <= 1/3) return { text: 'Mild SVD burden', cls: 'mild' };
-  if (ratio <= 2/3) return { text: 'Moderate SVD burden', cls: 'moderate' };
-  return { text: 'Severe SVD burden', cls: 'severe' };
+  if (ratio === 0) return { text: I18N[lang]['band-none'], cls: 'none' };
+  if (ratio <= 1/3) return { text: I18N[lang]['band-mild'], cls: 'mild' };
+  if (ratio <= 2/3) return { text: I18N[lang]['band-moderate'], cls: 'moderate' };
+  return { text: I18N[lang]['band-severe'], cls: 'severe' };
 }
 
 function calculate() {
@@ -347,16 +502,17 @@ function calculate() {
   const cssPoint = css ? 1 : 0;
   const atrophyPoint = (gca >= 2) ? 1 : 0;
 
+  const t = I18N[lang].components;
   const components = [
-    ['Lacunes', lacunes ? 1 : 0],
-    ['White matter hyperintensities', wmh],
-    ['Microbleeds', microbleeds ? 1 : 0],
-    ['Enlarged perivascular spaces', evpsPoint],
+    [t.lacunes, lacunes ? 1 : 0],
+    [t.wmh, wmh],
+    [t.microbleeds, microbleeds ? 1 : 0],
+    [t.evps, evpsPoint],
   ];
   let max = 4;
   if (mode === 'extended') {
-    components.push(['Cortical superficial siderosis', cssPoint]);
-    components.push(['Cortical atrophy', atrophyPoint]);
+    components.push([t.css, cssPoint]);
+    components.push([t.atrophy, atrophyPoint]);
     max = 6;
   }
 
@@ -377,7 +533,11 @@ function calculate() {
   });
 }
 
-calculate();
+(function init() {
+  let saved = 'en';
+  try { saved = localStorage.getItem('esvd-lang') || 'en'; } catch (e) {}
+  setLang(saved);
+})();
 </script>
 
 </body>
