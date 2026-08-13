@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "eSVD-2026: An Extended Total Cerebral Small Vessel Disease Score"
+version: 1.0.0
+date-released: 2026-08-13
+authors:
+  - family-names: Karami
+    given-names: Saheb
+repository-code: "https://github.com/sabi-karami/eSVD-2026"
+url: "https://sabi-karami.github.io/eSVD-2026/"
+license: MIT
+keywords:
+  - small vessel disease
+  - neuroimaging
+  - MRI
+  - neurology
+  - stroke

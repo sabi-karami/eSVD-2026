@@ -1,0 +1,51 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "esvd2026"
+version = "1.0.0"
+description = "eSVD-2026: an updated, evidence-based extension of the Total Cerebral Small Vessel Disease (SVD) Score"
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+authors = [{ name = "Saheb Karami" }]
+keywords = [
+  "small vessel disease",
+  "neuroimaging",
+  "neurology",
+  "MRI",
+  "SVD score",
+  "cerebral microbleeds",
+  "white matter hyperintensities",
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Science/Research",
+  "Intended Audience :: Healthcare Industry",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Topic :: Scientific/Engineering :: Medical Science Apps.",
+]
+
+[project.urls]
+Homepage = "https://github.com/sabi-karami/eSVD-2026"
+Repository = "https://github.com/sabi-karami/eSVD-2026"
+"Web calculator" = "https://sabi-karami.github.io/eSVD-2026/"
+Issues = "https://github.com/sabi-karami/eSVD-2026/issues"
+
+[project.scripts]
+esvd = "esvd.cli:main"
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0", "pytest-cov>=4.0"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
